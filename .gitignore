@@ -8,3 +8,8 @@
 /src/server/OnlineShop.MVC/bin/Debug/net6.0
 /src/server/OnlineShop.MVC/obj
 /src/server/OnlineShop.Services/obj
+/src/server/.vs/OnlineShop/v17
+/src/server/OnlineShop.API/bin/Debug/net6.0
+/src/server/OnlineShop.Data/bin/Debug/net6.0
+/src/server/OnlineShop.Models/bin/Debug/net6.0
+/src/server/OnlineShop.Services/bin/Debug/net6.0
