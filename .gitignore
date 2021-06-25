@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/server/OnlineShop.API/obj
+/src/server/OnlineShop.Data/obj
+/src/server/OnlineShop.Models/obj
+/src/server/OnlineShop.MVC/bin/Debug/net6.0
+/src/server/OnlineShop.MVC/obj
+/src/server/OnlineShop.Services/obj
