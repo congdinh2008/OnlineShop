@@ -8,7 +8,7 @@ namespace OnlineShop.Data
 {
     public static class DbInitializer
     {
-        public static async Task SeedDate(OnlineShopDbContext context)
+        public static void SeedData(OnlineShopDbContext context)
         {
             context.Database.EnsureCreated();
             if (context.Categories.Any())
@@ -37,12 +37,59 @@ namespace OnlineShop.Data
                 }
             };
 
-            await context.Categories.AddRangeAsync(categories);
+            context.Categories.AddRange(categories);
 
             var products = new List<Product>()
             {
+                new Product()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Product 01",
+                    Summary = "This is product 01",
+                    Price = 3.99M,
+                    ImageUrl = "product01.jpg",
+                    Category = categories.Single(x=>x.Name == "Category 01")
+                },
+                new Product()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Product 02",
+                    Summary = "This is product 02",
+                    Price = 3.99M,
+                    ImageUrl = "product02.jpg",
+                    Category = categories.Single(x=>x.Name == "Category 01")
+                },
+                new Product()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Product 03",
+                    Summary = "This is product 03",
+                    Price = 3.99M,
+                    ImageUrl = "product03.jpg",
+                    Category = categories.Single(x=>x.Name == "Category 02")
+                },
+                new Product()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Product 04",
+                    Summary = "This is product 04",
+                    Price = 3.99M,
+                    ImageUrl = "product04.jpg",
+                    Category = categories.Single(x=>x.Name == "Category 03")
+                },
+                new Product()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Product 05",
+                    Summary = "This is product 05",
+                    Price = 3.99M,
+                    ImageUrl = "product05.jpg",
+                    Category = categories.Single(x=>x.Name == "Category 02")
+                },
+            };
+            context.Products.AddRange(products);
 
-            }
+            context.SaveChanges();
         }
     }
 }
