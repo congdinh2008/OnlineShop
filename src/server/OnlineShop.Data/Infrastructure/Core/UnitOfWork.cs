@@ -41,7 +41,7 @@ namespace OnlineShop.Data.Infrastructure.Core
             _dbContext.ChangeTracker.AutoDetectChangesEnabled = value;
         }
 
-        public ICoreRepository<T> CoreRepository<T>() where T : Entity, IEntity
+        public ICoreRepository<T> CoreRepository<T>() where T : Entity
         {
             return new CoreRepository<T>(_dbContext);
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop.Data.Infrastructure.Core
 {
-    public class CoreRepository<T> : ICoreRepository<T> where T : class
+    public class CoreRepository<T> : ICoreRepository<T> where T : Entity
     {
         #region Protected Fields
 
@@ -64,7 +65,10 @@ namespace OnlineShop.Data.Infrastructure.Core
         /// <param name="isHardDelete">is hard delete?</param>
         public virtual void Delete(T entity, bool isHardDelete = false)
         {
-            DbSet.Remove(entity);
+            if (isHardDelete)
+                DbSet.Remove(entity);
+            else
+                entity.IsDeleted = true;
         }
 
         /// <summary>
