@@ -47,10 +47,8 @@ namespace OnlineShop.Data.Infrastructure.Core
 
         public virtual void Add(IEnumerable<T> entities)
         {
-            foreach (var entity in entities)
-            {
-                Add(entity);
-            }
+            // Use AddRange() to improve the performance.
+            DbSet.AddRange(entities);
         }
 
         public virtual void Update(T entity)
@@ -78,10 +76,14 @@ namespace OnlineShop.Data.Infrastructure.Core
         /// <param name="isHardDelete">is hard delete?</param>
         public virtual void Delete(IEnumerable<T> entities, bool isHardDelete = false)
         {
-            foreach (var entity in entities)
-            {
-                Delete(entity, isHardDelete);
-            }
+            // Improve performance for hard delete
+            if (isHardDelete)
+                DbSet.RemoveRange(entities);
+            else
+                foreach (var entity in entities)
+                {
+                    entity.IsDeleted = true;
+                }
         }
 
         /// <summary>
@@ -92,10 +94,9 @@ namespace OnlineShop.Data.Infrastructure.Core
         public virtual void Delete(Expression<Func<T, bool>> where, bool isHardDelete = false)
         {
             var entities = GetQuery(where).AsEnumerable();
-            foreach (var entity in entities)
-            {
-                Delete(entity, isHardDelete);
-            }
+
+            // Use this overload instead of using foreach to improve performance
+            Delete(entities, isHardDelete);
         }
 
         /// <summary>
@@ -115,12 +116,43 @@ namespace OnlineShop.Data.Infrastructure.Core
 
         public virtual IQueryable<T> GetQuery()
         {
-            return DbSet.AsQueryable();
+            // Remove AsQueryable() since DbSet<T> already implemented IQueryable<T>
+            return DbSet;
         }
 
-        public virtual IQueryable<T> GetQuery(Expression<Func<T, bool>> where)
+        public virtual IQueryable<T> GetQuery(Expression<Func<T, bool>> condition)
         {
-            return GetQuery().Where(where);
+            return DbSet.Where(condition);
+        }
+
+        public virtual async Task<IEnumerable<T>> GetQueryAsync()
+        {
+            return await DbSet.ToListAsync();
+        }
+
+        public virtual async Task<IEnumerable<T>> GetQueryAsync(Expression<Func<T, bool>> condition)
+        {
+            return await DbSet.Where(condition).ToListAsync();
+        }
+
+        public virtual IQueryable<T> GetByPage(int size, int page)
+        {
+            return DbSet.Skip(size * (page - 1)).Take(size);
+        }
+
+        public virtual IQueryable<T> GetByPage(Expression<Func<T, bool>> condition, int size, int page)
+        {
+            return DbSet.Where(condition).Skip(size * (page - 1)).Take(size);
+        }
+
+        public virtual async Task<IEnumerable<T>> GetByPageAsync(int size, int page)
+        {
+            return await DbSet.Skip(size * (page - 1)).Take(size).ToListAsync();
+        }
+
+        public virtual async Task<IEnumerable<T>> GetByPageAsync(Expression<Func<T, bool>> condition, int size, int page)
+        {
+            return await DbSet.Where(condition).Skip(size * (page - 1)).Take(size).ToListAsync();
         }
 
         #endregion
