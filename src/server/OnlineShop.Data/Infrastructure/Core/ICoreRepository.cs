@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Data.Infrastructure.Core
 {
@@ -22,5 +23,13 @@ namespace OnlineShop.Data.Infrastructure.Core
         IQueryable<T> GetQuery();
 
         IQueryable<T> GetQuery(Expression<Func<T, bool>> where);
+        T GetById(Guid id);
+        Task<T> GetByIdAsync(Guid id);
+        Task<IEnumerable<T>> GetQueryAsync();
+        Task<IEnumerable<T>> GetQueryAsync(Expression<Func<T, bool>> condition);
+        IQueryable<T> GetByPage(int size, int page);
+        IQueryable<T> GetByPage(Expression<Func<T, bool>> condition, int size, int page);
+        Task<IEnumerable<T>> GetByPageAsync(int size, int page);
+        Task<IEnumerable<T>> GetByPageAsync(Expression<Func<T, bool>> condition, int size, int page);
     }
 }
