@@ -18,6 +18,6 @@ namespace OnlineShop.Data.Infrastructure.Core
 
         Task<int> SaveChangesAsync();
 
-        ICoreRepository<T> CoreRepository<T>() where T : Entity, IEntity;
+        ICoreRepository<T> CoreRepository<T>() where T : Entity;
     }
 }
