@@ -47,10 +47,8 @@ namespace OnlineShop.Data.Infrastructure.Core
 
         public virtual void Add(IEnumerable<T> entities)
         {
-            foreach (var entity in entities)
-            {
-                Add(entity);
-            }
+            // Use AddRange() to improve the performance.
+            DbSet.AddRange(entities);
         }
 
         public virtual void Update(T entity)
@@ -83,10 +81,14 @@ namespace OnlineShop.Data.Infrastructure.Core
         /// <param name="isHardDelete">is hard delete?</param>
         public virtual void Delete(IEnumerable<T> entities, bool isHardDelete = false)
         {
-            foreach (var entity in entities)
-            {
-                Delete(entity, isHardDelete);
-            }
+            // Improve performance for hard delete
+            if (isHardDelete)
+                DbSet.RemoveRange(entities);
+            else
+                foreach (var entity in entities)
+                {
+                    entity.IsDeleted = true;
+                }
         }
 
         /// <summary>
@@ -97,10 +99,9 @@ namespace OnlineShop.Data.Infrastructure.Core
         public virtual void Delete(Expression<Func<T, bool>> where, bool isHardDelete = false)
         {
             var entities = GetQuery(where).AsEnumerable();
-            foreach (var entity in entities)
-            {
-                Delete(entity, isHardDelete);
-            }
+
+            // Use this overload instead of using foreach to improve performance
+            Delete(entities, isHardDelete);
         }
 
         /// <summary>
@@ -123,9 +124,9 @@ namespace OnlineShop.Data.Infrastructure.Core
             return DbSet;
         }
 
-        public virtual IQueryable<T> GetQuery(Expression<Func<T, bool>> where)
+        public virtual async Task<IEnumerable<T>> GetByPageAsync(Expression<Func<T, bool>> condition, int size, int page)
         {
-            return GetQuery().Where(where);
+            return await DbSet.Where(condition).Skip(size * (page - 1)).Take(size).ToListAsync();
         }
 
         // x=>x.Name.Contains(searchString)
