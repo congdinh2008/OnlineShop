@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop.Data.Infrastructure.Core
 {
-    public class CoreRepository<T> : ICoreRepository<T> where T : class
+    public class CoreRepository<T> : ICoreRepository<T> where T : class, IEntity
     {
         #region Protected Fields
 
@@ -64,7 +65,15 @@ namespace OnlineShop.Data.Infrastructure.Core
         /// <param name="isHardDelete">is hard delete?</param>
         public virtual void Delete(T entity, bool isHardDelete = false)
         {
-            DbSet.Remove(entity);
+            if (isHardDelete)
+            {
+                DbSet.Remove(entity);
+            }
+            else
+            {
+                entity.IsDeleted = true;
+                DbSet.Update(entity);
+            }
         }
 
         /// <summary>
@@ -111,12 +120,34 @@ namespace OnlineShop.Data.Infrastructure.Core
 
         public virtual IQueryable<T> GetQuery()
         {
-            return DbSet.AsQueryable();
+            return DbSet;
         }
 
         public virtual IQueryable<T> GetQuery(Expression<Func<T, bool>> where)
         {
             return GetQuery().Where(where);
+        }
+
+        // x=>x.Name.Contains(searchString)
+        // OrderBy(x=>x.Name);
+        public virtual IQueryable<T> Get(Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "")
+        {
+            IQueryable<T> query = DbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in
+                includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return orderBy != null ? orderBy(query) : query;
         }
 
         #endregion

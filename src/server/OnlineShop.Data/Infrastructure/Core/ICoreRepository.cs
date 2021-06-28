@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Data.Infrastructure.Core
 {
     public interface ICoreRepository<T>
     {
+        T GetById(Guid id);
+
+        Task<T> GetByIdAsync(Guid id);
+
         void Add(T entity);
 
         void Add(IEnumerable<T> entities);
@@ -22,5 +27,9 @@ namespace OnlineShop.Data.Infrastructure.Core
         IQueryable<T> GetQuery();
 
         IQueryable<T> GetQuery(Expression<Func<T, bool>> where);
+
+        IQueryable<T> Get(Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "");
     }
 }

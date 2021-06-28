@@ -1,8 +1,4 @@
 ﻿using OnlineShop.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlineShop.Data.Infrastructure.Core
@@ -23,6 +19,11 @@ namespace OnlineShop.Data.Infrastructure.Core
 
         public ICoreRepository<Category> CategoryRepository =>
             _categoryRepository ??= new CoreRepository<Category>(_dbContext);
+
+        private IProductRepository _productRepository;
+
+        public IProductRepository ProductRepository =>
+            _productRepository ??= new ProductRepository(_dbContext);
 
         #region Methods
         public int SaveChanges()

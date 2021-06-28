@@ -12,6 +12,8 @@ namespace OnlineShop.Data.Infrastructure.Core
 
         ICoreRepository<Category> CategoryRepository { get; }
 
+        IProductRepository ProductRepository { get; }
+
         #endregion
 
         int SaveChanges();
