@@ -48,26 +48,14 @@
                         </th>
                         <th scope="col">
                             <a asp-action="Index" asp-controller="CategoryManagement" asp-area="Admin" asp-route-sortOrder="@ViewData["NameSortParm"]"
-                               asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["CurrentPageSize"]" class="text-white">
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["CurrentPageSize"]" class="text-dark">
                                 Category Name
-                            </a>
-                        </th>
-                        <th scope="col">
-                            <a asp-action="Index" asp-controller="CategoryManagement" asp-area="Admin" asp-route-sortOrder="@ViewData["SlugSortParm"]"
-                               asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["CurrentPageSize"]" class="text-white">
-                                Slug
                             </a>
                         </th>
                         <th scope="col" class="d-none d-sm-table-cell">
                             <a asp-action="Index" asp-controller="CategoryManagement" asp-area="Admin" asp-route-sortOrder="@ViewData["CreatedDateSortParm"]"
-                               asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["CurrentPageSize"]" class="text-white">
-                                Created Date
-                            </a>
-                        </th>
-                        <th scope="col" class="d-none d-sm-table-cell">
-                            <a asp-action="Index" asp-controller="CategoryManagement" asp-area="Admin" asp-route-sortOrder="@ViewData["ModifiedDateSortParm"]"
-                               asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["CurrentPageSize"]" class="text-white">
-                                Modified Date
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageSize="@ViewData["CurrentPageSize"]" class="text-dark">
+                                Inserted At
                             </a>
                         </th>
                         <th scope="col">Manage</th>
@@ -87,10 +75,6 @@
                             <td class="d-none d-sm-table-cell">
                                 <a asp-action="Edit" asp-controller="CategoryManagement" asp-area="Admin"
                                    asp-route-id="@category.Id">@category.InsertedAt.ToShortDateString()</a>
-                            </td>
-                            <td class="d-none d-sm-table-cell">
-                                <a asp-action="Edit" asp-controller="CategoryManagement" asp-area="Admin"
-                                   asp-route-id="@category.Id">@category.UpdatedAt.ToShortDateString()</a>
                             </td>
                             <td>
                                 <form asp-action="Delete" asp-controller="CategoryManagement" asp-area="Admin" asp-route-id="@category.Id">
@@ -125,6 +109,7 @@
                            asp-route-pageIndex="1" asp-route-pageSize="@ViewData["CurrentPageSize"]" class="btn page-link @prevDisabled">
                             <i class="fas fa-fast-backward"></i>
                         </a>
+                    </li>
                     <li class="page-item">
                         <a asp-action="Index" asp-controller="CategoryManagement" asp-area="Admin"
                            asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]"
@@ -155,6 +140,7 @@
                            asp-route-pageSize="@ViewData["CurrentPageSize"]" class="btn page-link @nextDisabled">
                             <i class="fas fa-forward"></i>
                         </a>
+                    </li>
                     <li class="page-item">
                         <a asp-action="Index" asp-controller="CategoryManagement" asp-area="Admin" asp-route-sortOrder="@ViewData["CurrentSort"]"
                            asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-pageIndex="@(Model.PageIndex)"

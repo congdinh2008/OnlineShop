@@ -142,6 +142,7 @@ namespace OnlineShop.Data.Infrastructure.Core
                 query = query.Where(filter);
             }
 
+            // includeProperties = "Products"
             foreach (var includeProperty in
                 includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -149,6 +150,11 @@ namespace OnlineShop.Data.Infrastructure.Core
             }
 
             return orderBy != null ? orderBy(query) : query;
+        }
+
+        public IQueryable<T> GetQuery(Expression<Func<T, bool>> where)
+        {
+            return DbSet.Where(where);
         }
 
         #endregion

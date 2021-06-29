@@ -41,6 +41,7 @@ namespace OnlineShop.MVC.Areas.Admin.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
+            // x => x.Name.Contains(searchString)
             Expression<Func<Category, bool>> filter = null;
 
             if (!string.IsNullOrEmpty(searchString))
@@ -48,6 +49,7 @@ namespace OnlineShop.MVC.Areas.Admin.Controllers
                 filter = c => c.Name.Contains(searchString);
             }
 
+            // q => q.OrderByDescending(c => c.Name)
             Func<IQueryable<Category>, IOrderedQueryable<Category>> orderBy = null;
 
             switch (sortOrder)
@@ -71,6 +73,7 @@ namespace OnlineShop.MVC.Areas.Admin.Controllers
 
             return View(categories);
         }
+
 
         // GET: Admin/CategoryManagement/Details/5
         public async Task<IActionResult> Details(Guid? id)
@@ -182,5 +185,14 @@ namespace OnlineShop.MVC.Areas.Admin.Controllers
             await _categoryService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+    }
+
+    public class CategoryViewModel
+    {
+        public Guid Id { get; set; }
+        
+        public string CategoryName { get; set; }
+
+        public int TotalProduct { get; set; }
     }
 }
