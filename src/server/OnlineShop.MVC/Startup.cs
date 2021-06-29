@@ -5,7 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnlineShop.Data;
+using OnlineShop.Data.Infrastructure.Core;
+using OnlineShop.Models;
 using OnlineShop.MVC.ConfigurationOptions;
+using OnlineShop.Services;
+using OnlineShop.Services.BaseServices;
 
 namespace OnlineShop.MVC
 {
@@ -33,7 +37,14 @@ namespace OnlineShop.MVC
             services.AddDbContext<OnlineShopDbContext>(options =>
                 options.UseSqlServer(AppSettings.ConnectionStrings.OnlineShopConn));
 
+
+            services.AddScoped<ICoreRepository<Category>, CoreRepository<Category>>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IBaseService<Category>, BaseServices<Category>>();
+
+            services.AddScoped<ICategoryService, CategoryServices>();
             services.AddControllersWithViews();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +70,10 @@ namespace OnlineShop.MVC
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
