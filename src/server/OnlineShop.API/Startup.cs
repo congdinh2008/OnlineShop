@@ -45,6 +45,25 @@ namespace OnlineShop.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OnlineShop.API", Version = "v1" });
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowedOrigins", builder => builder
+                    .WithOrigins(AppSettings.CORS.AllowedOrigins)
+                    .WithHeaders(AppSettings.CORS.AllowedHeadersList)
+                    .WithMethods(AppSettings.CORS.AllowedMethodsList));
+
+                options.AddPolicy("AllowAnyOrigin", builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+
+                options.AddPolicy("CustomPolicy", builder => builder
+                    .AllowAnyOrigin()
+                    .WithMethods("Get")
+                    .WithHeaders("Content-Type"));
+            });
+
+
             services.AddScoped<ICoreRepository<Category>, CoreRepository<Category>>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IBaseService<Category>, BaseServices<Category>>();
@@ -65,6 +84,8 @@ namespace OnlineShop.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(AppSettings.CORS.AllowAnyOrigin ? "AllowAnyOrigin" : "AllowedOrigins");
 
             app.UseAuthorization();
 

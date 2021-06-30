@@ -43,8 +43,9 @@ namespace OnlineShop.API.Controllers
 
         // POST api/<CategoriesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(Category category)
         {
+            return Ok(category);
         }
 
         // PUT api/<CategoriesController>/5

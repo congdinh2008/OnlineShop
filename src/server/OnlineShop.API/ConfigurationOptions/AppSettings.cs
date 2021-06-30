@@ -6,6 +6,6 @@
 
         public string AllowedHosts { get; set; }
 
-        //public CORS CORS { get; set; }
+        public CORS CORS { get; set; }
     }
 }
